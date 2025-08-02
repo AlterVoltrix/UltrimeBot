@@ -1,26 +1,49 @@
+from aiogram.types import (ReplyKeyboardMarkup, KeyboardButton,
+                          InlineKeyboardMarkup, InlineKeyboardButton)
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart, Command
 import app.keyboards as kb
-
 router = Router()
 
+
+
+# Главное меню
 # Главное меню
 @router.message(CommandStart())
 async def cmd_start(message: Message):
-    await message.answer(
-        'Приветствую, я UltrimeBot. Помогаю с вопросами по устройствам и прошивкам.',
-        reply_markup=kb.main
+    # Создаем клавиатуру главного меню
+    main_kb = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text='Типичные вопросы FAQ')],
+            [KeyboardButton(text='Руководства'), KeyboardButton(text='Об устройствах')]
+        ],
+        resize_keyboard=True,
+        input_field_placeholder='Выберите раздел...'
     )
-    await message.reply('Чем могу помочь?')
+    
+    # Отправляем приветственное сообщение с клавиатурой
+    await message.answer(
+        'Приветствую, я UltrimeBot. Помогаю с вопросами по устройствам и прошивкам.\n\n'
+        'Выберите нужный раздел:',
+        reply_markup=main_kb
+    )
 
-# Обработка кнопки "Назад"
+# Обработка кнопки "Назад" - теперь удаляет предыдущее сообщение
 @router.callback_query(F.data == "back_to_main")
 async def back_handler(callback: CallbackQuery):
-    await callback.message.edit_text("Выберите раздел:", reply_markup=None)
-    await callback.message.answer("Главное меню", reply_markup=kb.main)
+    try:
+        # Удаляем сообщение с кнопками
+        await callback.message.delete()
+    except Exception as e:
+        print(f"Ошибка при удалении сообщения: {e}")
+    
+    # Отправляем новое сообщение с главным меню
+    await callback.message.answer(
+        "",
+        reply_markup=kb.main
+    )
     await callback.answer()
-
 # Раздел FAQ
 @router.message(F.text == 'Типичные вопросы FAQ')
 async def faq_menu(message: Message):
@@ -100,4 +123,16 @@ async def Error(callback: CallbackQuery):
 """
     )
     await callback.answer()
+
+
+
+@router.message(Command("help"))
+async def cmd_help(message: Message):
+    await message.answer(
+        "Справка по боту:",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="FAQ", callback_data="help_faq"),
+             InlineKeyboardButton(text="Поддержка", url="t.me/AlterVoltrix")]
+        ])
+    )
 
