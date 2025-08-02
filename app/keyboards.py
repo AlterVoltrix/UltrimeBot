@@ -27,6 +27,8 @@ guides = InlineKeyboardMarkup(inline_keyboard=[
     [InlineKeyboardButton(text='Инструкция по работе с Ultrime', url='https://vostok.b4com.tech/Products/Files/DocEditor.aspx?fileid=72017')],  # Замените ссылку
     [InlineKeyboardButton(text='Обновления', url='https://vostok.b4com.tech/Products/Files/DocEditor.aspx?fileid=89589')],
     [InlineKeyboardButton(text='Тестирование', url='https://vostok.b4com.tech/Products/Files/DocEditor.aspx?fileid=96329')],
+    [InlineKeyboardButton(text='Документация', url='https://vostok.b4com.tech/Products/Files/DocEditor.aspx?fileid=65489')],
+
     [back_button]
 ])
 
