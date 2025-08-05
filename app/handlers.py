@@ -91,7 +91,9 @@ async def WordUltrime(callback: CallbackQuery):
    6. Нажмите кнопку 'Старт' \n
 """
 
+
    )
+    await callback.answer()
     
 @router.callback_query(F.data == "TwoDevices")
 async def TwoDevices(callback : CallbackQuery):
@@ -107,7 +109,7 @@ async def TwoDevices(callback : CallbackQuery):
 """
     )
 
-
+    await callback.answer()
 @router.callback_query(F.data == "Error")
 async def Error(callback: CallbackQuery):
     await callback.message.answer(
